@@ -33,19 +33,17 @@ class HTTPClient(object):
         self._last_request_time = time.time()
         pass
 
-    def post(self, url, data=None, json=None, headers=default_headers, timeout=download_timeout):
+    def post(self, url, data=None, json=None, headers=default_headers, timeout=download_timeout, allow_redirects=False):
         self._set_last_request_time()
 
         logging.info("<POST %s> %s" % (url, data))
         # logging.debug("HEADER %s" % self._session.headers)
-        # logging.debug(self._current_proxies)
-        # logging.debug(headers)
-        # logging.debug(self._session.cookies)
+        logging.debug(self._current_proxies)
+        logging.debug(headers)
+        logging.debug(self._session.cookies)
         try:
             response = self._session.post(url, data=data, json=json, proxies=self._current_proxies,
-                                          timeout=timeout, headers=headers,
-                                          # allow_redirects=False
-                                          )
+                                          timeout=timeout, headers=headers, allow_redirects=allow_redirects)
         except Exception, e:
             logging.error(e.message)
             raise HttpClientError()
@@ -53,19 +51,17 @@ class HTTPClient(object):
 
         return response
 
-    def get(self, url, headers=default_headers, timeout=download_timeout):
+    def get(self, url, headers=default_headers, timeout=download_timeout, allow_redirects=False):
         self._set_last_request_time()
 
         logging.info("<GET %s>" % url)
         # logging.debug("HEADER %s" % self._session.headers)
-        # logging.debug(self._current_proxies)
-        # logging.debug(headers)
-        # logging.debug(self._session.cookies)
+        logging.debug(self._current_proxies)
+        logging.debug(headers)
+        logging.debug(self._session.cookies)
         try:
             response = self._session.get(url, proxies=self._current_proxies,
-                                         timeout=timeout, headers=headers,
-                                         # allow_redirects=False
-                                         )
+                                         timeout=timeout, headers=headers, allow_redirects=allow_redirects)
         except Exception, e:
             logging.error(e.message)
             raise HttpClientError()

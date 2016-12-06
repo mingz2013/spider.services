@@ -7,7 +7,7 @@ from logging.handlers import RotatingFileHandler
 
 # CRITICAL > ERROR > WARNING > INFO > DEBUG > NOTSET
 
-def init_logging(log_file1="log/log.log", log_file2="log/myspider.log"):
+def init_logging(log_file1="log/log.log", log_file2="log/debug.log"):
     format_str = '%(asctime)s %(filename)s[line:%(lineno)d] <%(levelname)s> %(message)s'
 
     logging.basicConfig(
