@@ -2,7 +2,7 @@
 __author__ = 'zhaojm'
 
 
-class DefaultConfig(object):
+class BaseConfig(object):
     def __init__(self):
         self.download_delay = 1.5
         self.download_timeout = 20.0
