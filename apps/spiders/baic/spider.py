@@ -9,29 +9,13 @@ from captcha import read_body_to_string
 from apps.spiders.common.exception import Error302, Error403, Error404, Error502, Error503, ErrorStatusCode, \
     HttpClientError, \
     MoreCheckverifyCodeTimesError, NeedrefreshProxyError, NeedrefreshSearchKeyError
-from mongo import QyxybaicDB
-from mredis import RedisClient
+
 from site_client import SiteClient
-# from utils import get_1000_txt
-from get_proxy import GetProxy
 
-
-# from get_search_key import GetSearchKey
-
-
-# from config import proxies
 
 class Spider(object):
-    def __init__(self, thread_id=0):
-        # self._txt = get_1000_txt()
-
-        self._getProxy = GetProxy(0, thread_id)
-        # self._client = SiteClient(proxies)
-        # self._getSearchKey = GetSearchKey()
-        # self._proxy_ip = None
-        # self._proxy_port = None
-        self._search_key = None
-        # self.thread_id = thread_id
+    def __init__(self, config):
+        self.config = config
         pass
 
     def run(self, type):
@@ -49,24 +33,6 @@ class Spider(object):
             logging.exception(e.message)
             pass
 
-    # def _run(self):
-    #
-    #     for i in range(0, len(self._txt)):
-    #         # if i % 2 == 0:
-    #         for j in range(i, len(self._txt)):
-    #             # j = i + 1
-    #             logging.info("(i, j):->(%s, %s)" % (i, j))
-    #             self._search_key = self._txt[i] + self._txt[j]
-    #             if RedisClient.get_search_key(self._search_key):
-    #                 continue
-    #             try:
-    #                 self._refresh_proxy(remove_current=False)
-    #                 self.proxy_search()
-    #                 RedisClient.set_search_key(self._search_key)
-    #             except Exception, e:
-    #                 logging.exception("_run->%s" % e)
-    #                 raise e
-    #                 # continue
 
     def _run_2(self):
         self._refresh_proxy(remove_current=False)

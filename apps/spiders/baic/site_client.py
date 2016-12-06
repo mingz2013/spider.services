@@ -9,12 +9,15 @@ import math
 
 from bs4 import BeautifulSoup
 
-from http_client import HTTPClient
+from apps.spiders.common.http_client import HTTPClient
 
-from exception import Error302, Error403, Error404, Error502, Error503, ErrorStatusCode, HttpClientError
-from config import default_headers, USER_AGENTS
+from apps.spiders.common.exception import Error302, Error403, Error404, Error502, Error503, ErrorStatusCode, \
+    HttpClientError
+
 import random
-from config import host, domain, download_timeout
+
+from config import Config
+
 
 
 class SiteClient(object):
@@ -22,7 +25,7 @@ class SiteClient(object):
         # self._username = username
         # self._password = password
         self._http_client = HTTPClient(proxies=proxies)
-        self._user_agent = random.choice(USER_AGENTS)
+        self._user_agent = random.choice(Config.user_agents)
         self.credit_ticket = None
         self.currentTimeMillis = None
         self._detail_url = None
@@ -31,7 +34,8 @@ class SiteClient(object):
         self._search_list_url = None
         pass
 
-    def _verify_post(self, url, data=None, json=None, times=0, headers=default_headers, timeout=download_timeout):
+    def _verify_post(self, url, data=None, json=None, times=0, headers=Config.default_headers,
+                     timeout=Config.download_timeout):
 
         headers.update({
             'User-Agent': self._user_agent,
@@ -67,7 +71,8 @@ class SiteClient(object):
             else:
                 raise err
 
-    def _verify_get(self, url, times=0, headers=default_headers, refresh_ip=False, timeout=download_timeout):
+    def _verify_get(self, url, times=0, headers=Config.default_headers, refresh_ip=False,
+                    timeout=Config.download_timeout):
         headers.update({
             'User-Agent': self._user_agent,
             # "Proxy-Authorization": self.get_authHeader(refresh_ip)
@@ -136,7 +141,7 @@ class SiteClient(object):
     #     return authHeader
 
     def index_1(self):
-        index_1_url = domain + "/"
+        index_1_url = Config.domain + "/"
         headers = {
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
             'Accept-Encoding': 'gzip, deflate, sdch',
@@ -144,7 +149,7 @@ class SiteClient(object):
             'Cache-Control': 'no-cache',
             'Connection': 'keep-alive',
             # 'Cookie': '',
-            'Host': host,
+            'Host': Config.host,
             'Pragma': 'no-cache',
             # 'Referer': 'http://www.chinabidding.com/',
             'Upgrade-Insecure-Requests': '1',
@@ -163,7 +168,7 @@ class SiteClient(object):
             'Cache-Control': 'no-cache',
             'Connection': 'keep-alive',
             # 'Cookie': '',
-            'Host': host,
+            'Host': Config.host,
             'Pragma': 'no-cache',
             'Referer': self._index_1_url,
             'Upgrade-Insecure-Requests': '1'
@@ -188,7 +193,7 @@ class SiteClient(object):
         logging.info("-----currentTimeMillis:->%s------" % self.currentTimeMillis)
 
     def get_verify_img(self):
-        url = domain + "/CheckCodeYunSuan?currentTimeMillis=%s" % self.currentTimeMillis
+        url = Config.domain + "/CheckCodeYunSuan?currentTimeMillis=%s" % self.currentTimeMillis
         headers = {
             'Accept': 'image/webp,image/*,*/*;q=0.8',
             'Accept-Encoding': 'gzip, deflate, sdch',
