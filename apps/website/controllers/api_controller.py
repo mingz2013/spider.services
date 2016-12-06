@@ -4,14 +4,14 @@ __author__ = 'zhaojm'
 from flask import request, Blueprint, jsonify, current_app
 
 from ..services.api_service import APIService
-from apps.common.models.company import Company
+from common.models.company import Company
 
 api = Blueprint('api_controller', __name__, url_prefix='/api')
 
 
 @api.route('/', methods=['GET'])
 def index():
-    return "user index"
+    return "api index"
 
 
 @api.route('/push_one', methods=['POST'])

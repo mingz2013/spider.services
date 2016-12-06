@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 __author__ = 'zhaojm'
 
-from flask import Flask, render_template
+from flask import Flask
 
 # from flask.ext.bootstrap import Bootstrap
 # from flask.ext.mail import Mail
@@ -55,14 +55,16 @@ def register_routes(app):
             app.logger.error('bp is not blusprint')
 
     @app.errorhandler(403)
-    def page_403(error):
+    def error_403(error):
         app.logger.error("403")
-        return render_template('errors/403.html'), 403
+        # return render_template('errors/403.html'), 403
+        return '403', 403
 
     @app.errorhandler(404)
     def error_404(error):
         app.logger.error("404")
-        return render_template('errors/404.html'), 404
+        # return render_template('errors/404.html'), 404
+        return '404', 404
 
 
 def create_app(config_mode):
