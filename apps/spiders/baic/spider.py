@@ -6,7 +6,8 @@ import logging
 from bs4 import BeautifulSoup
 
 from captcha import read_body_to_string
-from exception import Error302, Error403, Error404, Error502, Error503, ErrorStatusCode, HttpClientError, \
+from apps.spiders.common.exception import Error302, Error403, Error404, Error502, Error503, ErrorStatusCode, \
+    HttpClientError, \
     MoreCheckverifyCodeTimesError, NeedrefreshProxyError, NeedrefreshSearchKeyError
 from mongo import QyxybaicDB
 from mredis import RedisClient
