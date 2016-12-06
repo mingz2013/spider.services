@@ -8,3 +8,6 @@ class Base0(object):
 
     def as_json(self):
         pass
+
+    def as_dict(self):
+        pass

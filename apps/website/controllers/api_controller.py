@@ -3,8 +3,8 @@ __author__ = 'zhaojm'
 
 from flask import request, Blueprint, jsonify, current_app
 
-from ....services.api.user_api_service import UserAPIService
-from commons.models.user.user import User
+from ..services.api_service import APIService
+from commons.models.company import Company
 
 api = Blueprint('api_controller', __name__, url_prefix='/api')
 
@@ -14,11 +14,11 @@ def index():
     return "user index"
 
 
-@api.route('/', methods=['POST'])
-def login():
+@api.route('/push_one', methods=['POST'])
+def push_one():
     try:
-        user = User(request.form)
-        result = UserAPIService.login(user)
+        company = Company(request.form)
+        result = APIService.insert_one(company)
         return jsonify({'retcode': 0, 'errmsg': "", 'result': result})
     except Exception, e:
         return jsonify({'retcode': -1, 'errmsg': e.message, 'result': ""})
