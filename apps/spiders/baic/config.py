@@ -16,3 +16,5 @@ class Config(DefaultConfig):
 
         self.host = host
         self.domain = "http://" + self.host
+
+        self.search_key_collection_name = "baic"

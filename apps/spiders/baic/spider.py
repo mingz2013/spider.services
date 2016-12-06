@@ -2,6 +2,7 @@
 __author__ = 'zhaojm'
 
 import logging
+import time
 
 from bs4 import BeautifulSoup
 
@@ -12,48 +13,25 @@ from apps.spiders.common.exception import Error302, Error403, Error404, Error502
 
 from site_client import SiteClient
 
+from apps.spiders.common.get_search_key import GetSearchKey
+
 
 class Spider(object):
     def __init__(self, config):
         self.config = config
+        self.get_search_key = GetSearchKey(self.config.search_key_collection_name)
         pass
 
-    def run(self, type):
-        logging.info("+++++++++++++run++++++++++++++++")
-        try:
-            if type == 1:
-                # self._run()
-                pass
-            elif type == 2:
-                self._run_2()
-            else:
-                raise Exception("error run type")
-            logging.info("++++++++++++++success finish!!!++++++++")
-        except Exception, e:
-            logging.exception(e.message)
-            pass
+    def run(self):
 
-
-    def _run_2(self):
-        self._refresh_proxy(remove_current=False)
         while True:
-
+            search_key = self.get_search_key.get_search_key()
+            if not search_key:
+                time.sleep(60 * 1)
+                continue
             try:
-                self._refresh_search_key()
-                # search_key = item['company_name']
-                logging.info("+++++++ search_key -> %s++++++++++" % self._search_key)
-                # if RedisClient.get_search_key(self._search_key):
-                #     continue
-                if QyxybaicDB.check_have(self._search_key):
-                    logging.info("-----------------pass-------------------")
-                    QyxybaicDB.remove_search_key_from_need(self._search_key)
-                    continue
-                # self._refresh_proxy(remove_current=True)
                 self.proxy_search()
-                # self.get_search()
-                # RedisClient.set_search_key(self._search_key)
-                QyxybaicDB.upsert_search_key_have(self._search_key)
-                QyxybaicDB.remove_search_key_from_need(self._search_key)
+                self.get_search_key.remove_search_key(search_key)
 
             except Exception, e:
                 logging.exception("_run->%s" % e)
@@ -70,70 +48,64 @@ class Spider(object):
         self._client = SiteClient(proxies)
         pass
 
-    def _refresh_search_key(self):
-        # self._search_key = self._getSearchKey.get_search_key()
-        item = QyxybaicDB.get_random_one_search_key_need()
-        self._search_key = item['search_key']
-        pass
-
     def proxy_search(self):
 
         try:
             self.get_search()
         except Error302, err:
             logging.error(err.message)
-            self._refresh_search_key()
+
             self._refresh_proxy()
             self.proxy_search()
         except Error403, err:
             logging.error(err.message)
-            self._refresh_search_key()
+
             self._refresh_proxy()
             self.proxy_search()
         except Error404, err:
             logging.error(err.message)
-            self._refresh_search_key()
+
             self._refresh_proxy()
             self.proxy_search()
         except Error502, err:
             logging.error(err.message)
-            self._refresh_search_key()
+
             self._refresh_proxy()
             self.proxy_search()
         except Error503, err:
             logging.error(err.message)
-            self._refresh_search_key()
+
             self._refresh_proxy()
             self.proxy_search()
         except ErrorStatusCode, err:
             logging.error(err.message)
-            self._refresh_search_key()
+
             self._refresh_proxy()
             self.proxy_search()
         except HttpClientError, err:
             logging.error(err.message)
-            self._refresh_search_key()
+
             self._refresh_proxy()
             self.proxy_search()
         except MoreCheckverifyCodeTimesError, err:
             logging.error(err.message)
-            self._refresh_search_key()
+
             self._refresh_proxy()
             self.proxy_search()
         except NeedrefreshProxyError, err:
             logging.error(err.message)
             # self._getProxy.remove_proxy(err._proxy_ip, err._proxy_port)
-            self._refresh_search_key()
+
             self._refresh_proxy()
             self.proxy_search()
         except NeedrefreshSearchKeyError, err:
             logging.error(err.message)
-            self._refresh_search_key()
+
             self.proxy_search()
         except Exception, e:
             logging.exception(e)
             self._refresh_proxy()
-            self._refresh_search_key()
+
             self.proxy_search()
             # raise e
             pass

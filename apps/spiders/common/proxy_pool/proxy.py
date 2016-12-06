@@ -2,13 +2,9 @@
 __author__ = 'zhaojm'
 
 
-
-class ProxyPool(object):
+class Proxy(object):
     def __init__(self):
         pass
 
-    def request_one(self):
-        pass
-
-    def release_one(self):
+    def refresh_ip(self):
         pass
