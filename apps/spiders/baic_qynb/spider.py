@@ -51,33 +51,7 @@ class Spider(object):
     def get_company(self, reg_bus_ent_id):
         logging.info("get_company.....%s............." % reg_bus_ent_id)
 
-        company = {}
-        # company.update({"base_info": self.parse_base_info(soup)})
-
-        # company.update({"tzr_list": self.get_tzr_list(reg_bus_ent_id)})
-        # company.update({"tzr_history_list": self.get_tzr_history_list(reg_bus_ent_id)})
-        # company.update({"zyry_list": self.get_zyry_list(reg_bus_ent_id)})
-        # company.update({"bgxx_list": self.get_bgxx_list(reg_bus_ent_id)})
-        # company.update({"fzjg_list": self.get_fzjg_list(reg_bus_ent_id)})
-        # company.update({"ztz_list": self.get_ztz_list(reg_bus_ent_id)})
-
-        # company.update({"other_info": self.get_other_info(reg_bus_ent_id)})
-        company.update({"gsgs_info": self.get_gsgs_info(reg_bus_ent_id)})
-
-        return company
-
-    # ++++++++公司公示信息+++++++++++++++++++++++++ #
-    def get_gsgs_info(self, reg_bus_ent_id):
-        # 公司公示信息
-        logging.info("get gsgs info...%s" % reg_bus_ent_id)
-        gsgs_info = {}
-        gsgs_info.update({"qynb": self.get_qynb_list(reg_bus_ent_id)})
-        # gsgs_info.update({"gdcz": self.get_gdcz_list(reg_bus_ent_id)})
-        # gsgs_info.update({"gqbg": self.get_gqbg_list(reg_bus_ent_id)})
-        # gsgs_info.update({"xzxk": self.get_xzxk_list(reg_bus_ent_id)})
-        # gsgs_info.update({"zscq": self.get_zscq_list(reg_bus_ent_id)})
-        # gsgs_info.update({"xzcf": self.get_xzcf_list(reg_bus_ent_id)})
-        return gsgs_info
+        self.get_qynb_list(reg_bus_ent_id)
 
     # ++++++++++++++++++++企业年报+++++++++++begin++++++++++ #
     def get_qynb_list(self, reg_bus_ent_id):
