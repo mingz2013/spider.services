@@ -1,31 +1,6 @@
 # -*- coding:utf-8 -*-
 __author__ = 'zhaojm'
 
-from flask import Flask
-
-# from flask.ext.bootstrap import Bootstrap
-# from flask.ext.mail import Mail
-# from flask.ext.moment import Moment
-# from flask.ext.sqlalchemy import SQLAlchemy
-from config import config_dict
-import sys
-
-import logging
-from logging.handlers import RotatingFileHandler
-
-# bootstrap = Bootstrap()
-# mail = Mail()
-# moment = Moment()
-# db = SQLAlchemy()
-# convert python's encoding to utf8
-try:
-    from imp import reload
-
-    reload(sys)
-    sys.setdefaultencoding('utf8')
-except (AttributeError, NameError):
-    print "set default coding utf-8 error"
-
 
 def _import_submodules_from_package(package):
     import pkgutil
@@ -67,12 +42,9 @@ def register_routes(app):
         return '404', 404
 
 
-def create_app(config_mode):
-    app = Flask(__name__)
-    app.config.from_object(config_dict[config_mode])
-    config_dict[config_mode].init_app(app)
-    app.config_mode = config_mode
-
+def register_logging(app):
+    import logging
+    from logging.handlers import RotatingFileHandler
     # 内部日志
     rotating_handler1 = RotatingFileHandler('logs/info.log', maxBytes=1 * 1024 * 1024, backupCount=5)
     rotating_handler2 = RotatingFileHandler('logs/error.log', maxBytes=1 * 1024 * 1024, backupCount=2)
@@ -88,16 +60,18 @@ def create_app(config_mode):
     if app.config.get("DEBUG"):
         # app.logger.addHandler(logging.StreamHandler())
         app.logger.setLevel(logging.DEBUG)
+    pass
 
-    # bootstrap.init_app(app)
-    # mail.init_app(app)
-    # moment.init_app(app)
-    # db.init_app(app)
+
+def create_app(config_mode):
+    from flask import Flask
+    app = Flask(__name__)
+    from config import config_dict
+    app.config.from_object(config_dict[config_mode])
+    config_dict[config_mode].init_app(app)
+    app.config_mode = config_mode
+
+    register_logging(app)
     register_routes(app)
-    # 定时器
-    # scheduler.init_app(app)
-    # scheduler.start()
-    # from apps.routes import main
-    # app.register_blueprint(main)
 
     return app

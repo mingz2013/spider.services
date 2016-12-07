@@ -1,7 +1,9 @@
 # -*- coding:utf-8 -*-
 __author__ = 'zhaojm'
 
+import codecs
 import datetime
+import time
 from copy import deepcopy
 
 
@@ -127,3 +129,12 @@ def model2dict_x(obj, keys=None):
         raise TypeError('参数类型错误')
 
     return ret
+
+
+def get_1000_txt():
+    f = codecs.open('data/1000.txt', 'r', 'utf-8')
+    return f.read()
+
+
+def get_timeStamp():
+    return int(time.time() * 1000)

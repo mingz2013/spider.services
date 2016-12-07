@@ -15,5 +15,9 @@ if mode:
 app = create_app(mode)
 
 if __name__ == '__main__':
+    from apps.common.default_encoding import init_encoding
+
+    init_encoding()
+
     app.debug = True
     app.run(host='0.0.0.0', port=5000)
