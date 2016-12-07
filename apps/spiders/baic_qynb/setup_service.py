@@ -8,7 +8,7 @@ if __name__ == "__main__":
     from apps.spiders.common.init_logging import init_logging
 
     init_logging()
-    from apps.spiders.common.default_encoding import init_encoding
+    from apps.common.default_encoding import init_encoding
 
     init_encoding()
     try:
