@@ -5,7 +5,7 @@ import os
 import sys
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-from website import create_app
+from . import create_app
 
 print "************* CURRENT CONFIG MODE: ", os.getenv('spider.services.config.mode')
 mode = os.getenv('spider.services.config.mode') or 'default'
