@@ -29,6 +29,7 @@ class Spider(object):
         while True:
             self._search_key = self.get_search_key.get_search_key()
             if not self._search_key:
+                logging.info("sleep 60*1....")
                 time.sleep(60 * 1)
                 continue
 
