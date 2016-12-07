@@ -2,17 +2,12 @@
 __author__ = 'zhaojm'
 
 import logging
-import time
 
 from bs4 import BeautifulSoup
 
-from apps.spiders.common.exception import NeedrefreshProxyError, HttpClientError, ErrorStatusCode
-
-from site_client import SiteClient
-
 from apps.spiders.common.get_search_key import GetSearchKey
+from site_client import SiteClient
 from ..common.proxy_pool.proxy_pool import ProxyPool
-from ..common.push.push_jichu import GongshangPush, ShuiwuPush, ZbPush, ZzjgdmPush, ShebaoPush
 
 
 class Spider(object):
@@ -28,11 +23,11 @@ class Spider(object):
         while True:
             try:
                 self._refresh_proxy()
-                reg_bus_ent_id = self._getSearchKey.get_reg_bus_ent_id()
+                reg_bus_ent_id = self.get_search_key.get_reg_bus_ent_id()
                 # reg_bus_ent_id = item['reg_bus_ent_id']
                 logging.info("-------------%s--------------" % reg_bus_ent_id)
 
-                company_info = self.get_company(reg_bus_ent_id)
+                self.get_qynb_list(reg_bus_ent_id)
 
             except Exception, e:
                 logging.exception(e)
@@ -46,12 +41,6 @@ class Spider(object):
         logging.info("++++++++proxies: %s++++++++++++" % proxies)
         self._client = SiteClient(self._config, proxies)
         pass
-
-    # -------------company detail----------------
-    def get_company(self, reg_bus_ent_id):
-        logging.info("get_company.....%s............." % reg_bus_ent_id)
-
-        self.get_qynb_list(reg_bus_ent_id)
 
     # ++++++++++++++++++++企业年报+++++++++++begin++++++++++ #
     def get_qynb_list(self, reg_bus_ent_id):
