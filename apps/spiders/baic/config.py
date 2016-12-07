@@ -18,3 +18,4 @@ class Config(BaseConfig):
         self.domain = "http://" + self.host
 
         self.search_key_collection_name = "baic"
+

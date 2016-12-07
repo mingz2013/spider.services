@@ -7,7 +7,8 @@ import time
 
 import requests
 
-from config import default_key, default_u
+default_key = "45024637863277825508811942708166"
+default_u = "mingz"
 
 
 def md5(data):
@@ -44,7 +45,7 @@ def push_data(url, data):
 
 
 if __name__ == "__main__":
-    from init_logging import init_logging
+    from ..init_logging import init_logging
 
     init_logging()
     url = "https://data.api.zhironghao.com/update/gongshang"
