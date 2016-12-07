@@ -14,34 +14,37 @@ from apps.spiders.common.exception import Error302, Error403, Error404, Error502
 from site_client import SiteClient
 
 from apps.spiders.common.get_search_key import GetSearchKey
+from ..common.proxy_pool.proxy_pool import ProxyPool
 
 
 class Spider(object):
     def __init__(self, config):
         self.config = config
         self.get_search_key = GetSearchKey(self.config.search_key_collection_name)
+        self._proxy_pool = ProxyPool()
+        self._search_key = None
         pass
 
     def run(self):
 
         while True:
-            search_key = self.get_search_key.get_search_key()
-            if not search_key:
+            self._search_key = self.get_search_key.get_search_key()
+            if not self._search_key:
                 time.sleep(60 * 1)
                 continue
+
             try:
+                self._refresh_proxy()
                 self.proxy_search()
-                self.get_search_key.remove_search_key(search_key)
+                self.get_search_key.remove_search_key(self._search_key)
 
             except Exception, e:
                 logging.exception("_run->%s" % e)
-                raise e
+                # raise e
                 # continue
 
-    def _refresh_proxy(self, remove_current=True):
-        # if remove_current:
-        #     self._getProxy.remove_proxy(self._proxy_ip, self._proxy_port)
-        self._proxy_ip, self._proxy_port, proxy_type = self._getProxy.get_proxy()
+    def _refresh_proxy(self):
+        self._proxy_ip, self._proxy_port, proxy_type = self._proxy_pool.request_one()
         http_proxy = "http://%s:%s" % (self._proxy_ip, self._proxy_port)
         proxies = {"http": http_proxy}
         logging.info("++++++++proxies: %s++++++++++++" % proxies)
@@ -52,56 +55,6 @@ class Spider(object):
 
         try:
             self.get_search()
-        except Error302, err:
-            logging.error(err.message)
-
-            self._refresh_proxy()
-            self.proxy_search()
-        except Error403, err:
-            logging.error(err.message)
-
-            self._refresh_proxy()
-            self.proxy_search()
-        except Error404, err:
-            logging.error(err.message)
-
-            self._refresh_proxy()
-            self.proxy_search()
-        except Error502, err:
-            logging.error(err.message)
-
-            self._refresh_proxy()
-            self.proxy_search()
-        except Error503, err:
-            logging.error(err.message)
-
-            self._refresh_proxy()
-            self.proxy_search()
-        except ErrorStatusCode, err:
-            logging.error(err.message)
-
-            self._refresh_proxy()
-            self.proxy_search()
-        except HttpClientError, err:
-            logging.error(err.message)
-
-            self._refresh_proxy()
-            self.proxy_search()
-        except MoreCheckverifyCodeTimesError, err:
-            logging.error(err.message)
-
-            self._refresh_proxy()
-            self.proxy_search()
-        except NeedrefreshProxyError, err:
-            logging.error(err.message)
-            # self._getProxy.remove_proxy(err._proxy_ip, err._proxy_port)
-
-            self._refresh_proxy()
-            self.proxy_search()
-        except NeedrefreshSearchKeyError, err:
-            logging.error(err.message)
-
-            self.proxy_search()
         except Exception, e:
             logging.exception(e)
             self._refresh_proxy()
@@ -185,10 +138,6 @@ class Spider(object):
             logging.info("++++++reg_bus_ent_id: %s++++++++++" % reg_bus_ent_id)
             logging.info("++++++credit_ticket: %s++++++++++" % credit_ticket)
 
-            if RedisClient.get_reg_bug_ent_id(reg_bus_ent_id):
-                logging.info("+++++++++++++pass+++++++++")
-                continue
-
             result = {}
             result.update({"reg_bus_ent_id": reg_bus_ent_id})
 
@@ -198,7 +147,6 @@ class Spider(object):
 
             QyxybaicDB.upsert_company(result)
 
-            RedisClient.set_reg_bug_ent_id(reg_bus_ent_id)
         try:
             page_count = soup.select_one('input[id="pagescount"]')['value']  # 总页数
             EntryPageNo = soup.select_one('input[id="EntryPageNo"]')['value']  # 当前页数
