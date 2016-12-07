@@ -8,7 +8,9 @@ class Config(BaseConfig):
     def __init__(self):
         BaseConfig.__init__(self)
 
-        from haha import host
+        host = "qyxy"
+        host += "."
+        host += "baic"
         host += "."
         host += "gov"
         host += "."
@@ -18,4 +20,3 @@ class Config(BaseConfig):
         self.domain = "http://" + self.host
 
         self.search_key_collection_name = "baic"
-
