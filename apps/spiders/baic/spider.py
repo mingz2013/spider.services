@@ -18,8 +18,8 @@ from ..common.proxy_pool.proxy_pool import ProxyPool
 
 class Spider(object):
     def __init__(self, config):
-        self.config = config
-        self.get_search_key = GetSearchKey(self.config.search_key_collection_name)
+        self._config = config
+        self.get_search_key = GetSearchKey(self._config.search_key_collection_name)
         self._proxy_pool = ProxyPool()
         self._search_key = None
         pass
@@ -48,7 +48,7 @@ class Spider(object):
         http_proxy = "http://%s:%s" % (self._proxy_ip, self._proxy_port)
         proxies = {"http": http_proxy}
         logging.info("++++++++proxies: %s++++++++++++" % proxies)
-        self._client = SiteClient(proxies)
+        self._client = SiteClient(self._config, proxies)
         pass
 
     def proxy_search(self):
@@ -141,9 +141,10 @@ class Spider(object):
             result = {}
             result.update({"reg_bus_ent_id": reg_bus_ent_id})
 
-            company = self.get_company(reg_bus_ent_id, credit_ticket)
+            self.get_company(reg_bus_ent_id, credit_ticket)
 
-            result.update(company)
+            # TODO set reg_bus_ent_id to other part to crawler
+
 
 
         try:
@@ -171,27 +172,6 @@ class Spider(object):
         # logging.debug(response.content)
         soup = BeautifulSoup(response.content, 'lxml')
 
-        company = {}
-        company.update({"base_info": self.parse_base_info(soup)})
-
-        # company.update({"tzr_list": self.get_tzr_list(reg_bus_ent_id)})
-        # company.update({"tzr_history_list": self.get_tzr_history_list(reg_bus_ent_id)})
-        # company.update({"zyry_list": self.get_zyry_list(reg_bus_ent_id)})
-        # company.update({"bgxx_list": self.get_bgxx_list(reg_bus_ent_id)})
-        # company.update({"fzjg_list": self.get_fzjg_list(reg_bus_ent_id)})
-        # company.update({"ztz_list": self.get_ztz_list(reg_bus_ent_id)})
-
-        # company.update({"other_info": self.get_other_info(reg_bus_ent_id)})
-        # company.update({"gsgs_info": self.get_gsgs_info(reg_bus_ent_id)})
-
-        return company
-
-    # ++++++++基本信息++++++++++++++++++++++++++++++ #
-    def parse_base_info(self, soup):
-        logging.info("parse_base_info..............")
-        #  基础信息
-        base_info = {}
-
         try:
             table_list = soup.select('div[class="jic"] table')
             for i in range(1, len(table_list) / 2 + 1):
@@ -202,19 +182,19 @@ class Spider(object):
                 text = text.strip()
 
                 if text == u"工商登记注册基本信息":
-                    base_info.update({"gsdjzc_info": self.parse_gsdjzc_info(f_lbiao_table)})  # 工商登记注册基本信息
+                    self.parse_gsdjzc_info(f_lbiao_table)  # 工商登记注册基本信息
                     pass
                 elif text == u"资本相关信息":
-                    base_info.update({"zbxg_info": self.parse_zbxg_info(f_lbiao_table)})  # 资本相关信息
+                    self.parse_zbxg_info(f_lbiao_table)  # 资本相关信息
                     pass
                 elif text == u"组织机构代码信息":
-                    base_info.update({"zzjgdm_info": self.parse_zzjgdm_info(f_lbiao_table)})  # 组织机构代码信息
+                    self.parse_zzjgdm_info(f_lbiao_table)  # 组织机构代码信息
                     pass
                 elif text == u"税务登记信息":
-                    base_info.update({"swdj_info": self.parse_swdj_info(f_lbiao_table)})  # 税务登记信息
+                    self.parse_swdj_info(f_lbiao_table)  # 税务登记信息
                     pass
                 elif text == u"社保登记信息":
-                    base_info.update({"sbdj_info": self.parse_sbdj_info(f_lbiao_table)})  # 社保登记信息
+                    self.parse_sbdj_info(f_lbiao_table)  # 社保登记信息
                     pass
                 else:
                     logging.error("unknown text ->%s" % text)
@@ -222,7 +202,6 @@ class Spider(object):
         except Exception, e:
             logging.exception("parse_base_info->%s" % e)
 
-        return base_info
 
     def parse_gsdjzc_info(self, f_lbiao_table):
         logging.info("parse_gsdjzc_info..............")
@@ -326,79 +305,3 @@ class Spider(object):
 
         return gsdjzc_info
 
-        # # ++++++++其他信息++++++++++++++++++++++++++++ #
-        # def get_other_info(self, reg_bus_ent_id):
-        #     other_info = {}
-        #     other_info.update({"jsxx": self.get_jsxx_list(reg_bus_ent_id)})
-        #     other_info.update({"tsxx": self.get_tsxx_list(reg_bus_ent_id)})
-        #     other_info.update({"lhxx": self.get_lhxx_list(reg_bus_ent_id)})
-        #     other_info.update({"xkzzxx": self.get_xkzzxx_list(reg_bus_ent_id)})
-        #     other_info.update({"xhxx": self.get_xhxx_list(reg_bus_ent_id)})
-        #     return other_info
-        #
-        # def get_jsxx_list(self, reg_bus_ent_id):
-        #     response = self._client.get_jsxx_list(reg_bus_ent_id)
-        #     soup = BeautifulSoup(response.content, 'lxml')
-        #     pass
-        #
-        # def get_tsxx_list(self, reg_bus_ent_id):
-        #     response = self._client.get_tsxx_list(reg_bus_ent_id)
-        #     soup = BeautifulSoup(response.content, 'lxml')
-        #     pass
-        #
-        # def get_lhxx_list(self, reg_bus_ent_id):
-        #     response = self._client.get_lhxx_list(reg_bus_ent_id)
-        #     soup = BeautifulSoup(response.content, 'lxml')
-        #     pass
-        #
-        # def get_xkzzxx_list(self, reg_bus_ent_id):
-        #     response = self._client.get_xkzzxx_list(reg_bus_ent_id)
-        #     soup = BeautifulSoup(response.content, 'lxml')
-        #     pass
-        #
-        # def get_xhxx_list(self, reg_bus_ent_id):
-        #     response = self._client.get_xhxx_list(reg_bus_ent_id)
-        #     soup = BeautifulSoup(response.content, 'lxml')
-        #     pass
-        #
-        # # ++++++++公司公示信息+++++++++++++++++++++++++ #
-        # def get_gsgs_info(self, reg_bus_ent_id):
-        #     gsgs_info = {}
-        #     gsgs_info.update({"qynb": self.get_qynb_list(reg_bus_ent_id)})
-        #     gsgs_info.update({"gdcz": self.get_gdcz_list(reg_bus_ent_id)})
-        #     gsgs_info.update({"gqbg": self.get_gqbg_list(reg_bus_ent_id)})
-        #     gsgs_info.update({"xzxk": self.get_xzxk_list(reg_bus_ent_id)})
-        #     gsgs_info.update({"zscq": self.get_zscq_list(reg_bus_ent_id)})
-        #     gsgs_info.update({"xzcf": self.get_xzcf_list(reg_bus_ent_id)})
-        #     return gsgs_info
-        #
-        # def get_qynb_list(self, reg_bus_ent_id):
-        #     # 企业年报
-        #     response = self._client.get_qynb_list(reg_bus_ent_id)
-        #     soup = BeautifulSoup(response.content, 'lxml')
-        #     pass
-        #
-        # def get_gdcz_list(self, reg_bus_ent_id):
-        #     response = self._client.get_gdcz_list(reg_bus_ent_id)
-        #     soup = BeautifulSoup(response.content, 'lxml')
-        #     pass
-        #
-        # def get_gqbg_list(self, reg_bus_ent_id):
-        #     response = self._client.get_gqbg_list(reg_bus_ent_id)
-        #     soup = BeautifulSoup(response.content, 'lxml')
-        #     pass
-        #
-        # def get_xzxk_list(self, reg_bus_ent_id):
-        #     response = self._client.get_xzxk_list(reg_bus_ent_id)
-        #     soup = BeautifulSoup(response.content, 'lxml')
-        #     pass
-        #
-        # def get_zscq_list(self, reg_bus_ent_id):
-        #     response = self._client.get_zscq_list(reg_bus_ent_id)
-        #     soup = BeautifulSoup(response.content, 'lxml')
-        #     pass
-        #
-        # def get_xzcf_list(self, reg_bus_ent_id):
-        #     response = self._client.get_xzcf_list(reg_bus_ent_id)
-        #     soup = BeautifulSoup(response.content, 'lxml')
-        #     pass
