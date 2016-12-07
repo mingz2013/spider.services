@@ -4,7 +4,7 @@ __author__ = 'zhaojm'
 import json
 import logging
 
-from push_api import push_data
+from ..common.push_api import push_data
 
 
 class BasePush(object):

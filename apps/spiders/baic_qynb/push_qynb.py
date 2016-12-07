@@ -4,7 +4,7 @@ __author__ = 'zhaojm'
 import json
 import logging
 
-from push_api import push_data
+from ..common.push_api import push_data
 
 company_base_info_templ = {
     u"企业经营状态": u"status",
