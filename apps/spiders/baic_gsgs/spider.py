@@ -5,10 +5,8 @@ import logging
 
 from bs4 import BeautifulSoup
 
-from exception import NeedrefreshProxyError, HttpClientError, ErrorStatusCode
-from get_proxy import GetProxy
-from get_search_key import GetSearchKey
-from mongo import QyxybaicLevel3DB
+from ..common.exception import NeedrefreshProxyError, HttpClientError, ErrorStatusCode
+
 from site_client import SiteClient
 
 
@@ -16,8 +14,7 @@ from site_client import SiteClient
 class Spider(object):
     def __init__(self):
         self._client = SiteClient()
-        self._getProxy = GetProxy(3, 0)
-        self._getSearchKey = GetSearchKey()
+
         pass
 
     def _refresh_proxy(self):

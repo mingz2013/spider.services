@@ -14,7 +14,7 @@ from site_client import SiteClient
 
 from apps.spiders.common.get_search_key import GetSearchKey
 from ..common.proxy_pool.proxy_pool import ProxyPool
-from ..common.push.push_jichu import GongshangPush, ShuiwuPush, ZbPush, ZzjgdmPush, ShebaoPush
+from push_base import GongshangPush, ShuiwuPush, ZbPush, ZzjgdmPush, ShebaoPush
 
 
 class Spider(object):
