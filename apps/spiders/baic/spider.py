@@ -14,6 +14,7 @@ from site_client import SiteClient
 
 from apps.spiders.common.get_search_key import GetSearchKey
 from ..common.proxy_pool.proxy_pool import ProxyPool
+from ..common.push.push_jichu import GongshangPush, ShuiwuPush, ZbPush, ZzjgdmPush, ShebaoPush
 
 
 class Spider(object):
@@ -182,19 +183,24 @@ class Spider(object):
                 text = text.strip()
 
                 if text == u"工商登记注册基本信息":
-                    self.parse_gsdjzc_info(f_lbiao_table)  # 工商登记注册基本信息
+                    gsdjzc_info = self.parse_gsdjzc_info(f_lbiao_table)  # 工商登记注册基本信息
+                    GongshangPush().push_info(gsdjzc_info)
                     pass
                 elif text == u"资本相关信息":
-                    self.parse_zbxg_info(f_lbiao_table)  # 资本相关信息
+                    zbxg_info = self.parse_zbxg_info(f_lbiao_table)  # 资本相关信息
+                    ZbPush().push_info(zbxg_info)
                     pass
                 elif text == u"组织机构代码信息":
-                    self.parse_zzjgdm_info(f_lbiao_table)  # 组织机构代码信息
+                    zzjgdm_info = self.parse_zzjgdm_info(f_lbiao_table)  # 组织机构代码信息
+                    ZzjgdmPush().push_info(zzjgdm_info)
                     pass
                 elif text == u"税务登记信息":
-                    self.parse_swdj_info(f_lbiao_table)  # 税务登记信息
+                    swdj_info = self.parse_swdj_info(f_lbiao_table)  # 税务登记信息
+                    ShuiwuPush().push_info(swdj_info)
                     pass
                 elif text == u"社保登记信息":
-                    self.parse_sbdj_info(f_lbiao_table)  # 社保登记信息
+                    sbdj_info = self.parse_sbdj_info(f_lbiao_table)  # 社保登记信息
+                    ShebaoPush().push_info(sbdj_info)
                     pass
                 else:
                     logging.error("unknown text ->%s" % text)
