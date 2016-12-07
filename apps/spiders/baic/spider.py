@@ -7,9 +7,8 @@ import time
 from bs4 import BeautifulSoup
 
 from captcha import read_body_to_string
-from apps.spiders.common.exception import Error302, Error403, Error404, Error502, Error503, ErrorStatusCode, \
-    HttpClientError, \
-    MoreCheckverifyCodeTimesError, NeedrefreshProxyError, NeedrefreshSearchKeyError
+from apps.spiders.common.exception import MoreCheckverifyCodeTimesError, NeedrefreshProxyError, \
+    NeedrefreshSearchKeyError
 
 from site_client import SiteClient
 
@@ -186,106 +185,6 @@ class Spider(object):
 
         return company
 
-    # # ---------------------left main------------------------
-    # def get_tzr_list(self, reg_bus_ent_id):
-    #     logging.info("get_tzr_list..............")
-    #     # 处理投资人信息
-    #     tzr_list = []
-    #
-    #     response = self._client.get_tzr_list(reg_bus_ent_id)
-    #     soup = BeautifulSoup(response.content, 'lxml')
-    #     tr_list = soup.select('table[id="tableIdStyle"] tr')
-    #     tr_list = tr_list[1:-1]
-    #     for tr in tr_list:
-    #         td_list = tr.select('td')
-    #         if len(td_list) == 5:
-    #             investor = {}
-    #             investor.update({
-    #                 "number": td_list[0].getText(),  # 序号
-    #                 "name": td_list[1].getText(),  # 投资人名称
-    #                 "investor_type": td_list[2].getText(),  # 投资人类型
-    #                 "card_type": td_list[3].getText(),  # 证照类型
-    #                 "card_number": td_list[4].getText()  # 证照号码
-    #             })
-    #             tzr_list.append(investor)
-    #
-    #     return tzr_list
-    #
-    # def get_tzr_history_list(self, reg_bus_ent_id):
-    #     logging.info("get_tzr_history_list..............")
-    #     # 处理投资人历史信息
-    #     tzr_history_list = []
-    #
-    #     response = self._client.get_tzr_history_list(reg_bus_ent_id)
-    #     soup = BeautifulSoup(response.content, 'lxml')
-    #     tr_list = soup.select('table[id="tableIdStyle"] tr')
-    #     tr_list = tr_list[1:-1]
-    #     for tr in tr_list:
-    #         td_list = tr.select('td')
-    #         if len(td_list) == 9:
-    #             investor = {}
-    #             investor.update({
-    #                 "number": td_list[0].getText(),  # 序号
-    #                 "name": td_list[1].getText(),  # 投资人名称
-    #                 "investor_type": td_list[2].getText(),  # 投资人类型
-    #                 "subscription_amount": td_list[3].getText(),  # 认缴出资金额(万元)
-    #                 "subscription_mode": td_list[4].getText(),  # 认缴出资方式
-    #                 "subscription_time": td_list[5].getText(),  # 认缴出资时间
-    #                 "paid_amount": td_list[6].getText(),  # 实缴出资金额(万元)
-    #                 "paid_mode": td_list[7].getText(),  # 实缴出资方式
-    #                 "paid_time": td_list[8].getText(),  # 实缴出资时间
-    #             })
-    #             tzr_history_list.append(investor)
-    #
-    #     return tzr_history_list
-    #
-    # def get_zyry_list(self, reg_bus_ent_id):
-    #     logging.info("get_zyry_list..............")
-    #     # 处理主要人员信息
-    #     zyry_list = []
-    #
-    #     response = self._client.get_zyry_list(reg_bus_ent_id)
-    #     soup = BeautifulSoup(response.content, 'lxml')
-    #     tr_list = soup.select('table[id="tableIdStyle"] tr')
-    #     tr_list = tr_list[1:-1]
-    #     for tr in tr_list:
-    #         td_list = tr.select('td')
-    #         people = {}
-    #         people.update({
-    #             "number": td_list[0].getText(),  # 序号
-    #             "name": td_list[1].getText(),  # 姓名
-    #             "position": td_list[2].getText(),  # 职位
-    #             "sex": td_list[3].getText(),  # 性别
-    #
-    #         })
-    #         zyry_list.append(people)
-    #
-    #     return zyry_list
-    #
-    # def get_bgxx_list(self, reg_bus_ent_id):
-    #     logging.info("get_bgxx_list..............")
-    #     # 处理变更信息
-    #     bgxx_list = []
-    #     response = self._client.get_bgxx_list(reg_bus_ent_id)
-    #     soup = BeautifulSoup(response.content, 'lxml')
-    #     return bgxx_list
-    #
-    # def get_fzjg_list(self, reg_bus_ent_id):
-    #     # 分支机构
-    #     fzjg_list = []
-    #     response = self._client.get_fzjg_list(reg_bus_ent_id)
-    #     soup = BeautifulSoup(response.content, 'lxml')
-    #     return fzjg_list
-    #
-    # def get_ztz_list(self, reg_bus_ent_id):
-    #     # 再投资信息
-    #     ztz_list = []
-    #     response = self._client.get_ztzxx_list(reg_bus_ent_id)
-    #     soup = BeautifulSoup(response.content, 'lxml')
-    #
-    #     return ztz_list
-
-    # ------------right main-------------------------#
     # ++++++++基本信息++++++++++++++++++++++++++++++ #
     def parse_base_info(self, soup):
         logging.info("parse_base_info..............")
