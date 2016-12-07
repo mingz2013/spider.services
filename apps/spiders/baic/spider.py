@@ -145,7 +145,6 @@ class Spider(object):
 
             result.update(company)
 
-            QyxybaicDB.upsert_company(result)
 
         try:
             page_count = soup.select_one('input[id="pagescount"]')['value']  # 总页数
