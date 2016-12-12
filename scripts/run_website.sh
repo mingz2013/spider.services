@@ -1,3 +1,4 @@
 #!/usr/bin/env bash
 
-python apps/setup_website.py &
+cd /home/apps/spider.services/
+python apps/website/setup.py &

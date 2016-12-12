@@ -4,9 +4,9 @@ __author__ = 'zhaojm'
 from flask import request, Blueprint, jsonify, current_app
 
 from ..services.api_service import APIService
-from common.models.company import Company
+from apps.common.models.company import Company
 
-api = Blueprint('proxy_controller', __name__, url_prefix='/api')
+api = Blueprint('proxy_controller', __name__, url_prefix='/proxy')
 
 
 @api.route('/test_ip', methods=['GET'])

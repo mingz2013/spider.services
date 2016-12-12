@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 __author__ = 'zhaojm'
 
-from common.mongo_db.company_collection import CompanyCollection
+from apps.common.mongo_db.company_collection import CompanyCollection
 
 
 class APIService(object):
