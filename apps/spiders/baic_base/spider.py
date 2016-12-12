@@ -5,23 +5,22 @@ import logging
 import time
 
 from bs4 import BeautifulSoup
+from ..common.proxy_server_pool.proxy_server_pool import ProxyServerPool
 
-from captcha import read_body_to_string
 from apps.spiders.common.exception import MoreCheckverifyCodeTimesError, NeedrefreshProxyError, \
     NeedrefreshSearchKeyError
-
-from site_client import SiteClient
-
 from apps.spiders.common.get_search_key import GetSearchKey
-from ..common.proxy_pool.proxy_pool import ProxyPool
+from captcha import read_body_to_string
 from push_base import GongshangPush, ShuiwuPush, ZbPush, ZzjgdmPush, ShebaoPush
+from site_client import SiteClient
 
 
 class Spider(object):
     def __init__(self, config):
         self._config = config
         self.get_search_key = GetSearchKey(self._config.search_key_collection_name)
-        self._proxy_pool = ProxyPool()
+        self._proxy_server_pool = ProxyServerPool()
+        self._proxy_server = self._proxy_server_pool.request_one()
         self._search_key = None
         pass
 
@@ -45,7 +44,7 @@ class Spider(object):
                 # continue
 
     def _refresh_proxy(self):
-        self._proxy_ip, self._proxy_port, proxy_type = self._proxy_pool.request_one()
+        self._proxy_ip, self._proxy_port, proxy_type = self._proxy_server.get
         http_proxy = "http://%s:%s" % (self._proxy_ip, self._proxy_port)
         proxies = {"http": http_proxy}
         logging.info("++++++++proxies: %s++++++++++++" % proxies)
@@ -131,7 +130,6 @@ class Spider(object):
         a_list = soup.select('table tr td font a')
         logging.info("+++++++++++++++++a_list len=%s+++++++++++++++++++" % len(a_list))
         for a in a_list:
-
             onclick = a["onclick"]
             reg_bus_ent_id = onclick.split('reg_bus_ent_id=')[1].split('&')[0]
             credit_ticket = onclick.split('credit_ticket=')[1].split('\'')[0]
@@ -145,8 +143,6 @@ class Spider(object):
             self.get_company(reg_bus_ent_id, credit_ticket)
 
             # TODO set reg_bus_ent_id to other part to crawler
-
-
 
         try:
             page_count = soup.select_one('input[id="pagescount"]')['value']  # 总页数
@@ -207,7 +203,6 @@ class Spider(object):
                     exit(1)
         except Exception, e:
             logging.exception("parse_base_info->%s" % e)
-
 
     def parse_gsdjzc_info(self, f_lbiao_table):
         logging.info("parse_gsdjzc_info..............")
@@ -310,4 +305,3 @@ class Spider(object):
             logging.exception("parse_sbdj_info->%s" % e)
 
         return gsdjzc_info
-

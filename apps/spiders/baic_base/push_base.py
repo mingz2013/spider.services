@@ -68,6 +68,7 @@ class BasePush(object):
         except Exception, e:
             logging.exception(e)
 
+
 class GongshangPush(BasePush):
     def __init__(self):
         BasePush.__init__(self)

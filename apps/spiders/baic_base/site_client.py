@@ -9,11 +9,6 @@ import math
 
 from bs4 import BeautifulSoup
 
-from apps.spiders.common.http_client import HTTPClient
-
-from apps.spiders.common.exception import Error302, Error403, Error404, Error502, Error503, ErrorStatusCode, \
-    HttpClientError
-
 import random
 
 from ..common.base_site_client import BaseSiteClient
@@ -219,4 +214,3 @@ class SiteClient(BaseSiteClient):
         response = self._verify_get(url, headers=headers)
         self._detail_url = url
         return response
-
