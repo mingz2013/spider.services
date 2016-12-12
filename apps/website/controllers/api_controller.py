@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 __author__ = 'zhaojm'
 
-from flask import request, Blueprint, jsonify, current_app
+from flask import request, Blueprint, jsonify, current_app, render_template
 
 from ..services.api_service import APIService
 from apps.common.models.company import Company
@@ -11,7 +11,7 @@ api = Blueprint('api_controller', __name__, url_prefix='/api')
 
 @api.route('/', methods=['GET'])
 def index():
-    return "api index"
+    return render_template('index.html')
 
 
 @api.route('/push_one', methods=['POST'])
