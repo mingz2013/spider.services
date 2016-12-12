@@ -20,7 +20,7 @@ class Spider(object):
         self._config = config
         self.get_search_key = GetSearchKey(self._config.search_key_collection_name)
         self._proxy_server_pool = ProxyServerPool()
-        self._proxy_server = self._proxy_server_pool.request_one()
+        self._proxy_server = None
         self._search_key = None
         pass
 
@@ -29,6 +29,8 @@ class Spider(object):
         while True:
             self._search_key = self.get_search_key.get_search_key()
             if not self._search_key:
+                self._proxy_server_pool.release_one(self._proxy_server)
+                self._proxy_server = None
                 logging.info("sleep 60*1....")
                 time.sleep(60 * 1)
                 continue
@@ -44,6 +46,8 @@ class Spider(object):
                 # continue
 
     def _refresh_proxy(self):
+        if not self._proxy_server:
+            self._proxy_server = self._proxy_server_pool.request_one()
         self._proxy_server.restart_adsl()
         time.sleep(1)
         self._proxy_ip, self._proxy_port = self._proxy_server.get_current_proxy()
@@ -173,6 +177,7 @@ class Spider(object):
 
         try:
             table_list = soup.select('div[class="jic"] table')
+            company_name = None
             for i in range(1, len(table_list) / 2 + 1):
                 f_lan_index = 2 * i - 2
                 f_lan_table = table_list[f_lan_index]
@@ -182,23 +187,24 @@ class Spider(object):
 
                 if text == u"工商登记注册基本信息":
                     gsdjzc_info = self.parse_gsdjzc_info(f_lbiao_table)  # 工商登记注册基本信息
-                    GongshangPush().push_info(gsdjzc_info)
+                    company_name = gsdjzc_info.get(u"名称")
+                    GongshangPush().push_info(gsdjzc_info, company_name)
                     pass
                 elif text == u"资本相关信息":
                     zbxg_info = self.parse_zbxg_info(f_lbiao_table)  # 资本相关信息
-                    ZbPush().push_info(zbxg_info)
+                    ZbPush().push_info(zbxg_info, company_name)
                     pass
                 elif text == u"组织机构代码信息":
                     zzjgdm_info = self.parse_zzjgdm_info(f_lbiao_table)  # 组织机构代码信息
-                    ZzjgdmPush().push_info(zzjgdm_info)
+                    ZzjgdmPush().push_info(zzjgdm_info, company_name)
                     pass
                 elif text == u"税务登记信息":
                     swdj_info = self.parse_swdj_info(f_lbiao_table)  # 税务登记信息
-                    ShuiwuPush().push_info(swdj_info)
+                    ShuiwuPush().push_info(swdj_info, company_name)
                     pass
                 elif text == u"社保登记信息":
                     sbdj_info = self.parse_sbdj_info(f_lbiao_table)  # 社保登记信息
-                    ShebaoPush().push_info(sbdj_info)
+                    ShebaoPush().push_info(sbdj_info, company_name)
                     pass
                 else:
                     logging.error("unknown text ->%s" % text)
