@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-python apps/run_website.py
+python apps/setup_website.py &
