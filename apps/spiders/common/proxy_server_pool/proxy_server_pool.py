@@ -4,13 +4,11 @@ __author__ = 'zhaojm'
 import random
 
 from ssh_config import username, password, ssh_ip_list
-from proxy import Proxy
+from proxy_server import ProxyServer
 
 
-class ProxyPool(object):
+class ProxyServerPool(object):
     def __init__(self):
-        self._username = username
-        self._password = password
         self._proxy_list = []
         self._lock_list = []
         self._parse_ssh_list(ssh_ip_list)
@@ -18,7 +16,7 @@ class ProxyPool(object):
 
     def _parse_ssh_list(self, ssh_list):
         for item in ssh_list:
-            p = Proxy(item['ip'], item['port'])
+            p = ProxyServer(item['ip'], item['port'], username, password)
             self._proxy_list.append(p)
 
     def request_one(self):
