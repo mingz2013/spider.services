@@ -44,7 +44,9 @@ class Spider(object):
                 # continue
 
     def _refresh_proxy(self):
-        self._proxy_ip, self._proxy_port, proxy_type = self._proxy_server.get
+        self._proxy_server.restart_adsl()
+        time.sleep(1)
+        self._proxy_ip, self._proxy_port = self._proxy_server.get_current_proxy()
         http_proxy = "http://%s:%s" % (self._proxy_ip, self._proxy_port)
         proxies = {"http": http_proxy}
         logging.info("++++++++proxies: %s++++++++++++" % proxies)
