@@ -45,7 +45,7 @@ def push_data(url, data):
 
 
 if __name__ == "__main__":
-    from ..init_logging import init_logging
+    from init_logging import init_logging
 
     init_logging()
     url = "https://data.api.zhironghao.com/update/gongshang"
