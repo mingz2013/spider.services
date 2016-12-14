@@ -6,7 +6,7 @@ import logging
 
 
 def test_api_push():
-    url = "http://localhost/push"
+    url = "http://localhost/api/push"
     data = {"company_name": "百度"}
     response = requests.post(url, data)
     logging.info(response)
