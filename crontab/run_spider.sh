@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-python apps/run_spider.py
+python apps/spiders/baic_base/setup_service.py &
