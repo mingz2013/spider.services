@@ -4,7 +4,7 @@ __author__ = 'zhaojm'
 import requests
 
 if __name__ == "__main__":
-    url = "http://localhost:5000/api/push_one"
+    url = "http://localhost/api/push"
 
     payload = {
         "company_name": "123"
