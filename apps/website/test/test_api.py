@@ -15,4 +15,7 @@ def test_api_push():
 
 
 if __name__ == "__main__":
+    from init_logging import init_logging
+
+    init_logging()
     test_api_push()

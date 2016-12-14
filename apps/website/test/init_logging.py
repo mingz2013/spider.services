@@ -8,7 +8,6 @@ from logging.handlers import RotatingFileHandler
 # CRITICAL > ERROR > WARNING > INFO > DEBUG > NOTSET
 
 def init_logging(error_file="logs/error.log", info_file="logs/info.log", noset_file="logs/noset.log"):
-
     format_str = '%(asctime)s %(filename)s[line:%(lineno)d] <%(levelname)s> %(message)s'
 
     formatter = logging.Formatter(format_str)
