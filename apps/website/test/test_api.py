@@ -12,3 +12,7 @@ def test_api_push():
     logging.info(response)
     logging.info(response.content)
     pass
+
+
+if __name__ == "__main__":
+    test_api_push()
