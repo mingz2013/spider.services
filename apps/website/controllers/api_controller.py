@@ -21,4 +21,5 @@ def push():
         result = APIService.insert_one(company)
         return jsonify({'retcode': 0, 'errmsg': "", 'result': result})
     except Exception, e:
+        current_app.logger.error(e.message)
         return jsonify({'retcode': -1, 'errmsg': e.message, 'result': ""})
