@@ -15,4 +15,4 @@ class CompanyCollection(object):
 
     @staticmethod
     def insert_one(company):
-        company_collection.insert(model2dict(company))
+        return company_collection.insert(model2dict(company))

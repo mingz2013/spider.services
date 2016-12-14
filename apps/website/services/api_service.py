@@ -10,5 +10,4 @@ class APIService(object):
 
     @staticmethod
     def insert_one(company):
-        CompanyCollection.insert_one(company)
-        pass
+        return CompanyCollection.insert_one(company)

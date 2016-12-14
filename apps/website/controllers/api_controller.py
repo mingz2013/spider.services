@@ -14,8 +14,8 @@ def index():
     return render_template('index.html')
 
 
-@api.route('/push_one', methods=['POST'])
-def push_one():
+@api.route('/push', methods=['POST'])
+def push():
     try:
         company = Company(request.form)
         result = APIService.insert_one(company)
