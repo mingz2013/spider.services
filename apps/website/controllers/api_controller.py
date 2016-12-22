@@ -16,6 +16,7 @@ def index():
 
 @api.route('/push', methods=['POST'])
 def push():
+    current_app.logger.info("request.form: %s" % request.form)
     try:
         company = Company(request.form)
         result = APIService.insert_one(company)
