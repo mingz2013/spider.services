@@ -11,6 +11,7 @@ REDIS_PORT = os.getenv("REDIS_PORT", 6379)
 redis_client = redis.StrictRedis(REDIS_HOST, REDIS_PORT, db=0)
 
 
+
 class RedisClient(object):
     def __init__(self):
         pass
@@ -34,3 +35,15 @@ class RedisClient(object):
     def get_search_key(search_key):
         return redis_client.hexists("qyxy.baic.search_key", search_key)
         # return False
+
+    @staticmethod
+    def request_random_one_proxy_server():
+        pass
+
+    @staticmethod
+    def release_proxy_server(proxy_server):
+        pass
+
+    @staticmethod
+    def init_proxy_server_pool(config):
+        pass

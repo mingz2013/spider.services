@@ -7,6 +7,7 @@ import paramiko
 
 from ssh_config import proxy_ip_url
 
+
 class ProxyServer(object):
     def __init__(self, ssh_ip, ssh_port, ssh_username, ssh_password, proxy_port):
         self._ssh_ip = ssh_ip
@@ -21,6 +22,9 @@ class ProxyServer(object):
         self._last_request_time = -1
 
         pass
+
+    def get_proxy_server_str(self):
+        return "%s:%s" % (self._ssh_ip, self._ssh_port)
 
     def _set_last_request_time(self):
         now = time.time()
