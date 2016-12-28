@@ -278,7 +278,7 @@ def push_zb(qynb_info, reg_bus_ent_id):
 
     qynb_detail = d.get("qynb_detail")
     if not qynb_detail:
-        logging.error("not found qynb_detail....%s" % company_name)
+        logging.error("not found qynb_detail....%s" % reg_bus_ent_id)
         return
 
     data.update(parse_company_base_info(qynb_detail.get("base_info")))
@@ -295,9 +295,9 @@ def push_zb(qynb_info, reg_bus_ent_id):
         u"gdbgInfo": json.dumps(parse_gdbg_list(qynb_detail.get("gdbg_list"))),
     })
 
-    c_n = data.get("")
+    company_name = data.get(u"companyName")
 
-    if not data.get(u"companyName"):
+    if not company_name:
         logging.error("not found companyName, before push")
         return
 
