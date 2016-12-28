@@ -257,7 +257,7 @@ def parse_gdbg_list(gdbg_list):
     return result
 
 
-def push_zb(qynb_info, reg_bus_ent_id, company_name):
+def push_zb(qynb_info, reg_bus_ent_id):
     if check_pushed(reg_bus_ent_id):
         logging.info("pass........")
         return
@@ -274,7 +274,7 @@ def push_zb(qynb_info, reg_bus_ent_id, company_name):
         u"year": d.get("year"),
     })
 
-    data.update({u"companyName": company_name})
+    # data.update({u"companyName": company_name})
 
     qynb_detail = d.get("qynb_detail")
     if not qynb_detail:
@@ -329,16 +329,16 @@ def push_all():
 
         reg_bus_ent_id = level_1.get("reg_bus_ent_id")
 
-        company = qyxy_baic_db.company_info.find_one({"reg_bus_ent_id": reg_bus_ent_id})
-        base_info = company.get("base_info")
-        if not base_info:
-            logging.error("not found base info....%s" % reg_bus_ent_id)
-            continue
-        gsdjzc_info = base_info.get("gsdjzc_info")
-        if not gsdjzc_info:
-            logging.error("not found gsdjzc_info....%s" % reg_bus_ent_id)
-            continue
-        company_name = gsdjzc_info.get(u"名称")
+        # company = qyxy_baic_db.company_info.find_one({"reg_bus_ent_id": reg_bus_ent_id})
+        # base_info = company.get("base_info")
+        # if not base_info:
+        #     logging.error("not found base info....%s" % reg_bus_ent_id)
+        #     continue
+        # gsdjzc_info = base_info.get("gsdjzc_info")
+        # if not gsdjzc_info:
+        #     logging.error("not found gsdjzc_info....%s" % reg_bus_ent_id)
+        #     continue
+        # company_name = gsdjzc_info.get(u"名称")
 
         gsgs_info = level_1.get("gsgs_info")
         if not gsgs_info:
@@ -351,7 +351,7 @@ def push_all():
             continue
 
         for qynb_info in qynb:
-            push_zb(qynb_info, reg_bus_ent_id, company_name)
+            push_zb(qynb_info, reg_bus_ent_id)
 
             # break  # 只push一次测
             # times -= 1
