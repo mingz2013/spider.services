@@ -273,6 +273,7 @@ def push_zb(qynb_info, reg_bus_ent_id, company_name):
         u"updateTime": d.get("date"),
         u"year": d.get("year"),
     })
+
     data.update({u"companyName": company_name})
 
     qynb_detail = d.get("qynb_detail")
@@ -293,6 +294,8 @@ def push_zb(qynb_info, reg_bus_ent_id, company_name):
         u"dwtzInfo": json.dumps(parse_dwtz_list(qynb_detail.get("dwtz_list"))),
         u"gdbgInfo": json.dumps(parse_gdbg_list(qynb_detail.get("gdbg_list"))),
     })
+
+    c_n = data.get("")
 
     if not data.get(u"companyName"):
         logging.error("not found companyName, before push")
@@ -336,9 +339,6 @@ def push_all():
             logging.error("not found gsdjzc_info....%s" % reg_bus_ent_id)
             continue
         company_name = gsdjzc_info.get(u"名称")
-        if not company_name:
-            logging.error("not found company_name....%s" % reg_bus_ent_id)
-            continue
 
         gsgs_info = level_1.get("gsgs_info")
         if not gsgs_info:
