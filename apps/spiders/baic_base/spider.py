@@ -19,7 +19,6 @@ class Spider(object):
     def __init__(self, config):
         self._config = config
         self.get_search_key = GetSearchKey(self._config.search_key_collection_name)
-        self._proxy_server_pool = ProxyServerPool()
         self._proxy_server = None
         self._search_key = None
         pass
@@ -29,8 +28,9 @@ class Spider(object):
         while True:
             self._search_key = self.get_search_key.get_search_key()
             if not self._search_key:
-                self._proxy_server_pool.release_one(self._proxy_server)
-                self._proxy_server = None
+                if self._proxy_server:
+                    ProxyServerPool.release_one(self._proxy_server)
+                    self._proxy_server = None
                 logging.info("sleep 60*1....")
                 time.sleep(60 * 1)
                 continue
@@ -47,7 +47,7 @@ class Spider(object):
 
     def _refresh_proxy(self):
         if not self._proxy_server:
-            self._proxy_server = self._proxy_server_pool.request_one()
+            self._proxy_server = ProxyServerPool.request_one()
         self._proxy_server.restart_adsl()
         time.sleep(1)
         self._proxy_ip, self._proxy_port = self._proxy_server.get_current_proxy()
